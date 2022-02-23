@@ -12,7 +12,7 @@ variable "svc_resource_group_name" {
 
 variable "servicebus-name" {
   type    = string
-  default = "dapolinasb10"
+  default = "dapolinasb15"
 }
 
 variable "location" {

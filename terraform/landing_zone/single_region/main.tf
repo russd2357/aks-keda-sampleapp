@@ -2,12 +2,19 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "2.97"
+      version = "2.93"
     }
   }
 }
 provider "azurerm" {
   features {}
+}
+
+resource "random_string" "random" {
+  length = 13
+  upper = false
+  special = false
+
 }
 
 # Resource group 
@@ -51,7 +58,7 @@ module "log_analytics" {
   source              = "../../modules/log_analytics"
   resource_group_name = azurerm_resource_group.mon_rg.name
   location            = var.location
-  law_name            = "${var.law_prefix}-core-${azurerm_resource_group.mon_rg.location}-001"
+  law_name            = "${var.law_prefix}-core-${azurerm_resource_group.mon_rg.location}-${random_string.random.result}"
 }
 
 resource "azurerm_resource_group" "hub_region1" {
@@ -216,7 +223,7 @@ module "peering_id_spk_Region1_2" {
 
   depends_on = [module.peering_aks_spk_Region1_1]
 }
-
+/*
 module "aks" {
   source                   = "../../modules/aks"
   resource_group_name      = azurerm_resource_group.aks_rg.name
@@ -226,13 +233,14 @@ module "aks" {
   spoke_virtual_network_id = module.id_spk_region1.vnet_id
   depends_on = [
     module.id_spk_region1_default_subnet,
-    module.jump_host
+    module.jump_host,
+    module.log_analytics
   ]
   acr_id       = module.acr.acr_id
   key_vault_id = module.hub_keyvault.kv_key_zone_id
 
 }
-
+*/
 
 
 module "acr" {
@@ -260,14 +268,14 @@ module "service_bus" {
   sb_private_zone_id  = module.private_dns.sb_private_zone_id
   subnet_id           = module.id_spk_region1_default_subnet.subnet_id
 }
-
+/*
 module "keda_app" {
   source              = "../../modules/keda"
   resource_group_name = module.aks.node_resource_group
   location            = var.location
   sb_id               = module.service_bus.service_bus_id
 }
-
+*/
 resource "azurerm_route_table" "default_aks_route" {
   name                = "default_aks_route"
   resource_group_name = azurerm_resource_group.hub_region1.name
@@ -301,11 +309,13 @@ module "azure_firewall_region1" {
   source                  = "../../modules/azure_firewall"
   resource_group_name     = azurerm_resource_group.hub_region1.name
   location                = azurerm_resource_group.hub_region1.location
-  azurefw_name            = var.azurefw_name_r1
+ # azurefw_name            = var.azurefw_name_r1
+  azurefw_name            = "azfw-${random_string.random.result}"
   azurefw_vnet_name       = module.hub_region1.vnet_name
   azurefw_addr_prefix     = var.azurefw_addr_prefix_r1
   sc_law_id               = module.log_analytics.log_analytics_id
   region1_aks_spk_ip_g_id = azurerm_ip_group.ip_g_region1_aks_spoke.id
+  depends_on = [ module.log_analytics]
 }
 
 # Jump host  Errors on creation with VMExtention is commented out

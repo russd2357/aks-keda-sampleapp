@@ -22,7 +22,7 @@ resource "azurerm_firewall_policy" "base_policy" {
   dns {
     proxy_enabled = true
   }
-  sku = "Premium"
+  sku = "Standard"
 }
 
 
@@ -31,7 +31,7 @@ resource "azurerm_firewall" "azure_firewall_instance" {
   location            = var.location
   resource_group_name = var.resource_group_name
   firewall_policy_id  = azurerm_firewall_policy.base_policy.id
-  sku_tier = "Premium"
+  sku_tier = "Standard"
 
   ip_configuration {
     name                 = "configuration"
@@ -84,7 +84,8 @@ resource "azurerm_monitor_diagnostic_setting" "azfw_diag" {
       enabled = false
     }
   }
-
+  depends_on = [azurerm_firewall.azure_firewall_instance,
+              azurerm_firewall_policy.base_policy]
 }
 
 resource "azurerm_firewall_policy_rule_collection_group" "aks_rule_collection" {
@@ -205,4 +206,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "aks_rule_collection" {
       destination_ports     = ["123"]
     }
   }
+  depends_on = [
+    azurerm_firewall.azure_firewall_instance
+  ]
 }
