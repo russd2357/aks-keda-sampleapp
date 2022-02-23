@@ -223,7 +223,7 @@ module "peering_id_spk_Region1_2" {
 
   depends_on = [module.peering_aks_spk_Region1_1]
 }
-/*
+
 module "aks" {
   source                   = "../../modules/aks"
   resource_group_name      = azurerm_resource_group.aks_rg.name
@@ -240,7 +240,7 @@ module "aks" {
   key_vault_id = module.hub_keyvault.kv_key_zone_id
 
 }
-*/
+
 
 
 module "acr" {
@@ -268,14 +268,14 @@ module "service_bus" {
   sb_private_zone_id  = module.private_dns.sb_private_zone_id
   subnet_id           = module.id_spk_region1_default_subnet.subnet_id
 }
-/*
+
 module "keda_app" {
   source              = "../../modules/keda"
   resource_group_name = module.aks.node_resource_group
   location            = var.location
   sb_id               = module.service_bus.service_bus_id
 }
-*/
+
 resource "azurerm_route_table" "default_aks_route" {
   name                = "default_aks_route"
   resource_group_name = azurerm_resource_group.hub_region1.name
