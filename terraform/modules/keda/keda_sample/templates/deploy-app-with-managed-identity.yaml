@@ -15,6 +15,11 @@ spec:
         app: order-processor
         aadpodidbinding: order-processor
     spec:
+      tolerations:
+      - key: "kubernetes.azure.com/scalesetpriority"
+        operator: "Equal"
+        value: "spot"
+        effect: "NoSchedule"
       containers:
       - name: order-processor
         image: ghcr.io/kedacore/sample-dotnet-worker-servicebus-queue:latest

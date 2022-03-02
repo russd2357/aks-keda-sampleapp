@@ -16,7 +16,7 @@ spec:
   scaleTargetRef:
     name: order-processor
   # minReplicaCount: 0 Change to define how many minimum replicas you want
-  maxReplicaCount: 10
+  maxReplicaCount: 50000
   triggers:
   - type: azure-servicebus
     metadata:
