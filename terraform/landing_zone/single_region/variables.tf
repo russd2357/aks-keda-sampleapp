@@ -12,7 +12,7 @@ variable "svc_resource_group_name" {
 
 variable "servicebus-name" {
   type    = string
-  default = "dapolinasb15"
+  default = "rdpsantsb15"
 }
 
 variable "location" {
@@ -23,7 +23,7 @@ variable "location" {
 variable "corp_prefix" {
   type        = string
   description = "Corp name Prefix"
-  default     = "rdp-santander0"
+  default     = "rdpsant0"
 }
 
 # LAW module
@@ -47,7 +47,7 @@ variable "tags" {
   type        = map(string)
 
   default = {
-    owner = "dapolina"
+    owner = "rdepina"
   }
 }
 
@@ -140,7 +140,7 @@ variable "azurefw_addr_prefix_r2" {
 
 variable "acr_name" {
   type    = string
-  default = "dapolinaacr01"
+  default = "rdpsantacr01"
 }
 
 # Jump host1  module
