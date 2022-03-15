@@ -23,7 +23,7 @@ variable "location" {
 variable "corp_prefix" {
   type        = string
   description = "Corp name Prefix"
-  default     = "rdp0"
+  default     = "rdp-santander0"
 }
 
 # LAW module
