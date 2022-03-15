@@ -23,7 +23,7 @@ variable "location" {
 variable "corp_prefix" {
   type        = string
   description = "Corp name Prefix"
-  default     = "dapolina0"
+  default     = "rdp0"
 }
 
 # LAW module

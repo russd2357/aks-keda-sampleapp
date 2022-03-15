@@ -224,35 +224,35 @@ module "peering_id_spk_Region1_2" {
   depends_on = [module.peering_aks_spk_Region1_1]
 }
 
-module "aks" {
-  source                   = "../../modules/aks"
-  resource_group_name      = azurerm_resource_group.aks_rg.name
-  location                 = var.location
-  aks_spoke_subnet_id      = module.id_spk_region1_default_subnet.subnet_id
-  hub_virtual_network_id   = module.hub_region1.vnet_id
-  spoke_virtual_network_id = module.id_spk_region1.vnet_id
-  depends_on = [
-    module.id_spk_region1_default_subnet,
-    module.jump_host,
-    module.log_analytics
-  ]
-  acr_id       = module.acr.acr_id
-  key_vault_id = module.hub_keyvault.kv_key_zone_id
+# module "aks" {
+#   source                   = "../../modules/aks"
+#   resource_group_name      = azurerm_resource_group.aks_rg.name
+#   location                 = var.location
+#   aks_spoke_subnet_id      = module.id_spk_region1_default_subnet.subnet_id
+#   hub_virtual_network_id   = module.hub_region1.vnet_id
+#   spoke_virtual_network_id = module.id_spk_region1.vnet_id
+#   depends_on = [
+#     module.id_spk_region1_default_subnet,
+#     module.jump_host,
+#     module.log_analytics
+#   ]
+#   acr_id       = module.acr.acr_id
+#   key_vault_id = module.hub_keyvault.kv_key_zone_id
 
-}
+# }
 
 
 
-module "acr" {
-  source              = "../../modules/acr"
-  resource_group_name = azurerm_resource_group.aks_rg.name
-  location            = var.location
-  subnet_id           = module.id_spk_region1_default_subnet.subnet_id
-  //subnet_id                       = module.id_pe_region1_default_subnet.subnet_id
-  acr_name            = var.acr_name
-  acr_private_zone_id = module.private_dns.acr_private_zone_id
+# module "acr" {
+#   source              = "../../modules/acr"
+#   resource_group_name = azurerm_resource_group.aks_rg.name
+#   location            = var.location
+#   subnet_id           = module.id_spk_region1_default_subnet.subnet_id
+#   //subnet_id                       = module.id_pe_region1_default_subnet.subnet_id
+#   acr_name            = var.acr_name
+#   acr_private_zone_id = module.private_dns.acr_private_zone_id
 
-}
+# }
 
 module "private_dns" {
   source                 = "../../modules/azure_dns"
@@ -260,21 +260,21 @@ module "private_dns" {
   location               = var.location
   hub_virtual_network_id = module.hub_region1.vnet_id
 }
-module "service_bus" {
-  source              = "../../modules/service_bus"
-  resource_group_name = azurerm_resource_group.aks_rg.name
-  location            = var.location
-  sb-name             = var.servicebus-name
-  sb_private_zone_id  = module.private_dns.sb_private_zone_id
-  subnet_id           = module.id_spk_region1_default_subnet.subnet_id
-}
+# module "service_bus" {
+#   source              = "../../modules/service_bus"
+#   resource_group_name = azurerm_resource_group.aks_rg.name
+#   location            = var.location
+#   sb-name             = var.servicebus-name
+#   sb_private_zone_id  = module.private_dns.sb_private_zone_id
+#   subnet_id           = module.id_spk_region1_default_subnet.subnet_id
+# }
 
-module "keda_app" {
-  source              = "../../modules/keda"
-  resource_group_name = module.aks.node_resource_group
-  location            = var.location
-  sb_id               = module.service_bus.service_bus_id
-}
+# module "keda_app" {
+#   source              = "../../modules/keda"
+#   resource_group_name = module.aks.node_resource_group
+#   location            = var.location
+#   sb_id               = module.service_bus.service_bus_id
+# }
 
 resource "azurerm_route_table" "default_aks_route" {
   name                = "default_aks_route"
